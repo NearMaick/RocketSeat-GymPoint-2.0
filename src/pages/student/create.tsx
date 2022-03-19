@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Header } from "../../components/Header";
 
 export default function StudentCreate() {
@@ -9,11 +10,11 @@ export default function StudentCreate() {
           <h4 className='font-bold text-xl'>Cadastro de aluno</h4>
         </div>
         <div>
-          <a
-            className='font-bold bg-gray-500 text-sm text-white px-4 py-3 mx-2 rounded-md '
-            href=''>
-            VOLTAR
-          </a>
+          <Link href='/student/list'>
+            <a className='font-bold bg-gray-500 text-sm text-white px-4 py-3 mx-2 rounded-md '>
+              VOLTAR
+            </a>
+          </Link>
           <a
             className='font-bold bg-red-500 text-sm text-white px-4 py-3 mx-2 rounded-md '
             href=''>
