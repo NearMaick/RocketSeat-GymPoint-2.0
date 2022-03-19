@@ -1,6 +1,6 @@
 export function Header() {
   return (
-    <header className='border-2 rounded-md flex items-center justify-between'>
+    <header className='bg-white border-2 rounded-md flex items-center justify-between'>
       <div className=' w-full flex'>
         <h1 className='px-4 text-red-500 font-bold'>GYMPOINT</h1>
         <div className='border-l-2 border-l-red-500 flex items-center '>
