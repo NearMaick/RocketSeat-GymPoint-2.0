@@ -52,9 +52,9 @@ export default function StudentList() {
             <p className='py-4'>{student.email}</p>
             <p className='py-4 mx-28'>{student.age}</p>
             <div className='w-full py-4 flex justify-end'>
-              <a className='px-2 text-blue-500' href=''>
-                editar
-              </a>
+              <Link href={`/student/update/${student.id}`}>
+                <a className='px-2 text-blue-500'>editar</a>
+              </Link>
               <a className='text-red-500' href=''>
                 apagar
               </a>
