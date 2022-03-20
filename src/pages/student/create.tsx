@@ -1,10 +1,34 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
+import * as Yup from "yup";
 import { Header } from "../../components/Header";
 
+const schema = Yup.object({
+  name: Yup.string().required("Nome é obrigatório"),
+  email: Yup.string()
+    .email("Deve ser um email válido")
+    .required("E-mail é obrigatório"),
+  height: Yup.number()
+    .positive("Não pode ser zero ou negativo")
+    .required("Altura é obrigatório"),
+  weight: Yup.number()
+    .positive("Não pode ser zero ou negativo")
+    .required("Peso é obrigatório"),
+  age: Yup.number()
+    .positive("Não pode ser zero ou negativo")
+    .required("Idade é obrigatório"),
+});
+
 export default function StudentCreate() {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
   const { push } = useRouter();
 
   function handleCreateStudentSubmit({ name, email, height, weight, age }) {
@@ -57,6 +81,7 @@ export default function StudentCreate() {
             type='text'
             placeholder='John Doe'
           />
+          <p className='text-red-500'>{errors.name?.message}</p>
 
           <h4 className='font-bold my-2'>ENDEREÇO DE E-MAIL</h4>
           <input
@@ -65,6 +90,7 @@ export default function StudentCreate() {
             type='email'
             placeholder='example@email.com'
           />
+          <p className='text-red-500'>{errors.email?.message}</p>
 
           <div className='flex'>
             <div className='w-1/3'>
@@ -74,6 +100,7 @@ export default function StudentCreate() {
                 className='w-11/12 border-gray-300 rounded-md'
                 type='number'
               />
+              <p className='text-red-500'>{errors.age?.message}</p>
             </div>
 
             <div className='w-1/3'>
@@ -83,6 +110,7 @@ export default function StudentCreate() {
                 className='w-11/12 border-gray-300 rounded-md'
                 type='number'
               />
+              <p className='text-red-500'>{errors.weight?.message}</p>
             </div>
 
             <div className='w-1/3'>
@@ -90,8 +118,9 @@ export default function StudentCreate() {
               <input
                 {...register("height")}
                 className='w-full border-gray-300 rounded-md'
-                type='text'
+                type='number'
               />
+              <p className='text-red-500'>{errors.height?.message}</p>
             </div>
           </div>
         </form>
