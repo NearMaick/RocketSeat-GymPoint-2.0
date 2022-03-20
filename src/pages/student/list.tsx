@@ -14,11 +14,25 @@ export default function StudentList() {
     );
   }
 
+  function handleDeleteStudent(id: string) {
+    const isConfirm = confirm("Você tem certeza disso?");
+
+    if (isConfirm) {
+      fetch(`http://localhost:3000/api/students/delete/${id}`, {
+        method: "delete",
+      });
+
+      loadStudentsData();
+    } else {
+      return;
+    }
+  }
+
   useEffect(() => {
     loadStudentsData();
 
     return () => setIsSubscribed(false);
-  }, [isSubscribed]);
+  }, [isSubscribed, students]);
 
   return (
     <div className='h-screen w-screen bg-gray-100'>
@@ -55,9 +69,14 @@ export default function StudentList() {
               <Link href={`/student/update/${student.id}`}>
                 <a className='px-2 text-blue-500'>editar</a>
               </Link>
-              <a className='text-red-500' href=''>
+              <button
+                type='button'
+                onClick={() => {
+                  handleDeleteStudent(student.id);
+                }}
+                className='text-red-500'>
                 apagar
-              </a>
+              </button>
             </div>
           </div>
         ))}
