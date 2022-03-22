@@ -22,6 +22,8 @@ export default function StudentList() {
     if (isConfirm) {
       fetch(`http://localhost:3000/api/students/delete/${id}`, {
         method: "delete",
+      }).then(() => {
+        loadStudentsData();
       });
     } else {
       return;
