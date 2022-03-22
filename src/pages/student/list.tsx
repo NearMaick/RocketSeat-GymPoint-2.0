@@ -1,7 +1,9 @@
 import { Student } from "@prisma/client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Header } from "../../components/Header";
+
+let debounceTimer: NodeJS.Timeout;
 
 export default function StudentList() {
   const [students, setStudents] = useState<Student[]>([]);
@@ -21,18 +23,26 @@ export default function StudentList() {
       fetch(`http://localhost:3000/api/students/delete/${id}`, {
         method: "delete",
       });
-
-      loadStudentsData();
     } else {
       return;
     }
+    loadStudentsData();
+  }
+
+  function handleFindStudent(event: ChangeEvent<HTMLInputElement>) {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      fetch(
+        `http://localhost:3000/api/students/listOneToName?name=${event.target.value}`
+      ).then((response) => response.json().then((data) => setStudents(data)));
+    }, 1000);
   }
 
   useEffect(() => {
     loadStudentsData();
 
     return () => setIsSubscribed(false);
-  }, [isSubscribed, students]);
+  }, [isSubscribed]);
 
   return (
     <div className='h-screen w-screen bg-gray-100'>
@@ -51,6 +61,7 @@ export default function StudentList() {
             className='rounded-md my-4'
             type='text'
             placeholder='Buscar Aluno'
+            onChange={(event) => handleFindStudent(event)}
           />
         </div>
       </section>
