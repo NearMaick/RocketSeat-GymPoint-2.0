@@ -35,16 +35,18 @@ export default function StudentUpdate() {
   const { id } = query;
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/students/listOne?id=${id}`).then(
-      (response) =>
-        response.json().then((data) => {
-          setValue("name", data.name);
-          setValue("email", data.email);
-          setValue("age", data.age);
-          setValue("weight", data.weight);
-          setValue("height", data.height);
-        })
-    );
+    if (id) {
+      fetch(`http://localhost:3000/api/students/listOne?id=${id}`).then(
+        (response) =>
+          response.json().then((data) => {
+            setValue("name", data.name);
+            setValue("email", data.email);
+            setValue("age", data.age);
+            setValue("weight", data.weight);
+            setValue("height", data.height);
+          })
+      );
+    }
   }, [id, setValue]);
 
   function handleUpdateStudentSubmit({ name, email, height, weight, age }) {
@@ -62,9 +64,9 @@ export default function StudentUpdate() {
       },
     });
 
-    push("/student/list");
+    alert("Cadastro atualizado!");
 
-    console.log({ name, email, height, weight, age });
+    push("/student/list");
   }
 
   return (

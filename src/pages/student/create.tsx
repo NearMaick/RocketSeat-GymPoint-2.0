@@ -46,6 +46,8 @@ export default function StudentCreate() {
       },
     });
 
+    alert("Cadastro realizado!");
+
     push("/student/list");
   }
 
