@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Header } from "../../../components/Header";
 
-export default function CreatePlanOption() {
+export default function UpdatePlanOption() {
   return (
     <div className='bg-gray-100 h-screen'>
       <Header />
