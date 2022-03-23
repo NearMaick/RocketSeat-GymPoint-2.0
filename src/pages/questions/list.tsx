@@ -37,7 +37,7 @@ export default function QuestionsList() {
           <h4 className='font-bold text-xl mx-28'>Pedidos de auxílio</h4>
         </div>
       </section>
-      <section className='bg-white mx-32 my-4 p-8'>
+      <section className='bg-white mx-32 my-4 p-8 w-[1200px]'>
         <div className='grid grid-cols-2'>
           <p className='font-bold py-2'>ALUNO</p>
         </div>

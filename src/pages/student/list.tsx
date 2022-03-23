@@ -67,7 +67,7 @@ export default function StudentList() {
           />
         </div>
       </section>
-      <section className='p-4 bg-white m-4'>
+      <section className='p-4 bg-white m-4 w-[1200px]'>
         <div className='grid grid-cols-4'>
           <p className='font-bold py-2'>NOME</p>
           <p className='font-bold py-2'>E-MAIL</p>
