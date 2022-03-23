@@ -62,20 +62,26 @@ export default function QuestionsList() {
             opacity: 0.9,
           },
         }}
-        className='bg-white h-1/2 w-1/2 mx-auto my-56 flex flex-col items-center justify-center'
+        className='bg-white h-1/2 w-1/2 rounded-md mx-auto my-56 flex flex-col justify-between'
         contentLabel='Example Modal'>
-        <h2>Pergunta do aluno</h2>
-        <p>
+        <h2 className='font-bold text-xl p-6'>Pergunta do aluno</h2>
+        <p className='px-6'>
           Olá pessoal da academia, gostaria de saber se quando acordar devo
           ingerir batata doce e frango logo de primeira, preparar as marmitas e
           lotar a geladeira? Dou um pico de insulina e jogo o hipercalórico?
         </p>
-        <h2>Sua resposta</h2>
+        <h2 className='font-bold text-xl px-6 py-2'>Sua resposta</h2>
         <textarea
+          className='w-11/12 h-64 mx-auto rounded-md'
           onChange={(event) => setAnswer(event.target.value)}
           placeholder='Digite sua resposta aqui'
         />
-        <button onClick={closeModal}>Responder Aluno</button>
+        <button
+          onClick={closeModal}
+          type='button'
+          className='bg-red-500 text-sm text-white  m-6 p-2 rounded-md'>
+          Responder Aluno
+        </button>
       </Modal>
     </div>
   );
