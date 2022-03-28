@@ -28,6 +28,32 @@ model Students {
   optionsId String?
 }
 
+model Questions {
+  id String @id @default(uuid())
+
+  question String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  questionsRegistrations QuestionsRegistrations[]
+}
+
+model QuestionsRegistrations {
+  id String @id @default(uuid())
+
+  question    Questions @relation(fields: [question_id], references: [id])
+  question_id String
+
+  registration    Registrations @relation(fields: [registration_id], references: [id])
+  registration_id String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("questions_registrations")
+}
+
 model Registrations {
   id String @id @default(uuid())
 
@@ -42,6 +68,8 @@ model Registrations {
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
   finished_at DateTime
+
+  questionsRegistrations QuestionsRegistrations[]
 }
 
 model Options {
