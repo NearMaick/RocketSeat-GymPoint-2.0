@@ -49,7 +49,7 @@ model Options {
 
   title String
   month Int
-  value BigInt
+  value Int
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

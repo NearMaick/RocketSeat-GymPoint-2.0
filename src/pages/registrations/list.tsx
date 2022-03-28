@@ -1,50 +1,33 @@
+import { Registrations } from "@prisma/client";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Header } from "../../components/Header";
-
-const registrations = [
-  {
-    id: "1",
-    student: "Maick Souza",
-    option: "Gold",
-    created_at: "01 de abril de 2022",
-    finish_at: "01 de agosto de 2022",
-    isActive: true,
-  },
-  {
-    id: "2",
-    student: "Maick Souza",
-    option: "Gold",
-    created_at: "01 de abril de 2022",
-    finish_at: "01 de agosto de 2022",
-    isActive: false,
-  },
-  {
-    id: "3",
-    student: "Maick Souza",
-    option: "Gold",
-    created_at: "01 de abril de 2022",
-    finish_at: "01 de agosto de 2022",
-    isActive: true,
-  },
-  {
-    id: "4",
-    student: "Maick Souza",
-    option: "Gold",
-    created_at: "01 de abril de 2022",
-    finish_at: "01 de agosto de 2022",
-    isActive: false,
-  },
-];
 
 let debounceTimer: NodeJS.Timeout;
 
 export default function RegistrationsList() {
+  const [registrations, setRegistrations] = useState<Registrations[]>([]);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+  function loadRegistrationsData() {
+    setIsSubscribed(true);
+    fetch("http://localhost:3000/api/registrations/list").then((response) =>
+      response.json().then((data) => setRegistrations(data))
+    );
+  }
+
+  useEffect(() => {
+    loadRegistrationsData();
+
+    return () => setIsSubscribed(false);
+  }, [isSubscribed]);
+
   return (
     <div className='h-screen w-screen bg-gray-100'>
       <Header />
       <section className='flex items-center justify-between p-4'>
         <div>
-          <h4 className='font-bold text-xl'>Gerenciando alunos</h4>
+          <h4 className='font-bold text-xl'>Gerenciando matrículas</h4>
         </div>
         <div>
           <Link href='/student/create'>
@@ -64,11 +47,11 @@ export default function RegistrationsList() {
         </div>
         {registrations.map((registration) => (
           <div key={registration.id} className='grid grid-cols-6 border-b-2'>
-            <p className='py-4'>{registration.student}</p>
-            <p className='py-4'>{registration.option}</p>
+            <p className='py-4'>{registration.student.name}</p>
+            <p className='py-4'>{registration.option.title}</p>
             <p className='py-4'>{registration.created_at}</p>
-            <p className='py-4'>{registration.finish_at}</p>
-            <p className='py-4 mx-28'>{registration.isActive && "SIM"}</p>
+            <p className='py-4'>{registration.finished_at}</p>
+            <p className='py-4 mx-28'>{registration.is_active && "SIM"}</p>
             <div className='w-full py-4 flex justify-end'>
               <Link href={`/registration/update/${registration.id}`}>
                 <a className='px-2 text-blue-500'>editar</a>

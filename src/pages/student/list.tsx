@@ -1,4 +1,4 @@
-import { Student } from "@prisma/client";
+import { Students } from "@prisma/client";
 import Link from "next/link";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Header } from "../../components/Header";
@@ -6,7 +6,7 @@ import { Header } from "../../components/Header";
 let debounceTimer: NodeJS.Timeout;
 
 export default function StudentList() {
-  const [students, setStudents] = useState<Student[]>([]);
+  const [students, setStudents] = useState<Students[]>([]);
   const [isSubscribed, setIsSubscribed] = useState(false);
 
   function loadStudentsData() {
