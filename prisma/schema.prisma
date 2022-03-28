@@ -10,15 +10,50 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Student {
+model Students {
   id String @id @default(uuid())
 
   name   String
-  email  String
+  email  String @unique
   age    Int
   weight Int    @default(0)
   height Int    @default(0)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  registrations Registrations[]
+
+  Options   Options? @relation(fields: [optionsId], references: [id])
+  optionsId String?
+}
+
+model Registrations {
+  id String @id @default(uuid())
+
+  is_active Boolean
+
+  student    Students @relation(fields: [student_id], references: [id])
+  student_id String
+
+  option    Options @relation(fields: [option_id], references: [id])
+  option_id String
+
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  finished_at DateTime
+}
+
+model Options {
+  id String @id @default(uuid())
+
+  title String
+  month Int
+  value BigInt
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  students      Students[]
+  registrations Registrations[]
 }
