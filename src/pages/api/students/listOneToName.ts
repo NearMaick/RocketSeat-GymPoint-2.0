@@ -6,7 +6,7 @@ export default async function StudentsListOneToName(
   response: NextApiResponse
 ) {
   const { name } = request.query as any;
-  const result = await prisma.student.findMany({
+  const result = await prisma.students.findMany({
     where: {
       name: {
         contains: name,
