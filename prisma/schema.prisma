@@ -24,8 +24,8 @@ model Students {
 
   registrations Registrations[]
 
-  Options   Options? @relation(fields: [optionsId], references: [id])
-  optionsId String?
+  options    Options? @relation(fields: [options_id], references: [id])
+  options_id String?
 }
 
 model Questions {

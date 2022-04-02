@@ -1,22 +1,26 @@
-import { useState } from "react";
+import { QuestionsRegistrations } from "@prisma/client";
+import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { Header } from "../../components/Header";
 
 Modal.setAppElement("#__next");
 
-const questions = [
-  { id: "1", student: "Maick Souza" },
-  { id: "2", student: "Maick Souza" },
-  { id: "3", student: "Maick Souza" },
-  { id: "4", student: "Maick Souza" },
-];
-
 export default function QuestionsList() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [answer, setAnswer] = useState("");
+  const [questions, setQuestions] = useState<QuestionsRegistrations[]>([]);
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
-  function openModal() {
+  function loadQuestionsData() {
+    setIsSubscribed(true);
+    fetch("http://localhost:3000/api/questions/list").then((response) =>
+      response.json().then((data) => setQuestions(data))
+    );
+  }
+
+  function openModal(id: string) {
     setModalIsOpen(true);
+    console.log(id);
   }
 
   function afterOpenModal() {
@@ -28,6 +32,12 @@ export default function QuestionsList() {
     setModalIsOpen(false);
     console.log(answer);
   }
+
+  useEffect(() => {
+    loadQuestionsData();
+
+    return () => setIsSubscribed(false);
+  }, [isSubscribed]);
 
   return (
     <div className=' h-screen w-screen bg-gray-100'>
@@ -43,9 +53,13 @@ export default function QuestionsList() {
         </div>
         {questions.map((question) => (
           <div key={question.id} className='grid grid-cols-2 border-b-2'>
-            <p className='py-4'>{question.student}</p>
+            <p className='py-4'>{question.registration.student.name}</p>
             <div className='w-full py-4 flex justify-end'>
-              <button type='button' onClick={openModal}>
+              <button
+                type='button'
+                onClick={() => {
+                  openModal(question.question_id);
+                }}>
                 <a className='px-2 text-blue-500'>responder</a>
               </button>
             </div>
