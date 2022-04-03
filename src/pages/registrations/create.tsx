@@ -34,16 +34,32 @@ export default function RegistrationCreate() {
     finished_at,
     price,
   }) {
-    console.log({
-      student_id,
-      option_id,
-      created_at,
-      finished_at,
-      price,
-    });
-    alert("Cadastro realizado!");
+    const optionSelected = options.find((option) => option.id === option_id);
 
-    push("/registrations/list");
+    // TODO manipular datas...
+    const createdAtFormatted = new Date(`${created_at}T00:00:00`);
+
+    const optionMonthInMilliseconds =
+      optionSelected.month * 30 * 24 * 60 * 60 * 1000;
+
+    const createdAtInMilliseconds = createdAtFormatted.getTime();
+
+    const finishedAtFormatted = new Date(
+      createdAtInMilliseconds + optionMonthInMilliseconds
+    );
+
+    console.log(finishedAtFormatted);
+
+    // console.log({
+    //   student_id,
+    //   option_id,
+    //   created_at: createdAtFormatted,
+    //   finished_at,
+    //   price,
+    // });
+    // alert("Cadastro realizado!");
+
+    // push("/registrations/list");
   }
 
   useEffect(() => {
