@@ -1,65 +1,67 @@
-import { yupResolver } from "@hookform/resolvers/yup";
+import { Options, Students } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import * as Yup from "yup";
 import { Header } from "../../components/Header";
 
-const schema = Yup.object({
-  name: Yup.string().required("Nome é obrigatório"),
-  email: Yup.string()
-    .email("Deve ser um email válido")
-    .required("E-mail é obrigatório"),
-  height: Yup.number()
-    .positive("Não pode ser zero ou negativo")
-    .required("Altura é obrigatório"),
-  weight: Yup.number()
-    .positive("Não pode ser zero ou negativo")
-    .required("Peso é obrigatório"),
-  age: Yup.number()
-    .positive("Não pode ser zero ou negativo")
-    .required("Idade é obrigatório"),
-});
-
 export default function RegistrationCreate() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-  });
+  const [students, setStudents] = useState<Students[]>([]);
+  const [options, setOptions] = useState<Options[]>([]);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+  function loadStudentsData() {
+    setIsSubscribed(true);
+    fetch("http://localhost:3000/api/students/list").then((response) =>
+      response.json().then((data) => setStudents(data))
+    );
+  }
+
+  function loadOptionsData() {
+    setIsSubscribed(true);
+    fetch("http://localhost:3000/api/options/list").then((response) =>
+      response.json().then((data) => setOptions(data))
+    );
+  }
+
+  const { register, handleSubmit } = useForm();
   const { push } = useRouter();
 
-  function handleCreateStudentSubmit({ name, email, height, weight, age }) {
-    fetch("http://localhost:3000/api/students/create", {
-      method: "post",
-      body: JSON.stringify({
-        name,
-        email,
-        age,
-        height,
-        weight,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
+  function handleCreateRegistrationSubmit({
+    student_id,
+    option_id,
+    created_at,
+    finished_at,
+    price,
+  }) {
+    console.log({
+      student_id,
+      option_id,
+      created_at,
+      finished_at,
+      price,
     });
-
     alert("Cadastro realizado!");
 
-    push("/student/list");
+    push("/registrations/list");
   }
+
+  useEffect(() => {
+    loadStudentsData();
+    loadOptionsData();
+
+    return () => setIsSubscribed(false);
+  }, [isSubscribed]);
 
   return (
     <div className='bg-gray-100 h-screen'>
       <Header />
       <section className='flex items-center justify-between p-8'>
         <div>
-          <h4 className='font-bold text-xl'>Cadastro de aluno</h4>
+          <h4 className='font-bold text-xl'>Cadastro de matrícula</h4>
         </div>
         <div>
-          <Link href='/student/list'>
+          <Link href='/registrations/list'>
             <a className='font-bold bg-gray-500 text-sm text-white px-4 py-3 mx-2 rounded-md '>
               VOLTAR
             </a>
@@ -75,55 +77,57 @@ export default function RegistrationCreate() {
       <section className='bg-white p-8'>
         <form
           id='student-create-form'
-          onSubmit={handleSubmit(handleCreateStudentSubmit)}>
+          onSubmit={handleSubmit(handleCreateRegistrationSubmit)}>
           <h4 className='font-bold my-2'>ALUNO</h4>
-          <input
-            {...register("name")}
+          <select
             className='w-full border-gray-300 rounded-md'
-            type='text'
-            placeholder='John Doe'
-          />
-          <p className='text-red-500'>{errors.name?.message}</p>
+            {...register("student_id")}>
+            {students.map((student) => (
+              <option key={student.id} value={student.id}>
+                {student.name}
+              </option>
+            ))}
+          </select>
 
           <div className='flex'>
             <div className='w-1/4'>
               <h4 className='font-bold my-2'>PLANO</h4>
-              <input
-                {...register("age")}
+              <select
                 className='w-11/12 border-gray-300 rounded-md'
-                type='number'
-              />
-              <p className='text-red-500'>{errors.age?.message}</p>
+                {...register("option_id")}>
+                {options.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.title}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className='w-1/4'>
               <h4 className='font-bold my-2'>DATA DE INÍCIO</h4>
               <input
-                {...register("weight")}
+                {...register("created_at")}
                 className='w-11/12 border-gray-300 rounded-md'
-                type='number'
+                type='date'
               />
-              <p className='text-red-500'>{errors.weight?.message}</p>
             </div>
 
             <div className='w-1/4'>
               <h4 className='font-bold my-2'>DATA DE TÉRMINO</h4>
               <input
-                {...register("height")}
-                className='w-full border-gray-300 rounded-md'
-                type='number'
+                {...register("finished_at")}
+                className='w-11/12 border-gray-300 rounded-md'
+                type='date'
               />
-              <p className='text-red-500'>{errors.height?.message}</p>
             </div>
 
-            <div className='w-1/4 ml-5'>
+            <div className='w-1/4'>
               <h4 className='font-bold my-2'>VALOR FINAL</h4>
               <input
-                {...register("height")}
+                {...register("price")}
                 className='w-full border-gray-300 rounded-md'
                 type='number'
               />
-              <p className='text-red-500'>{errors.height?.message}</p>
             </div>
           </div>
         </form>

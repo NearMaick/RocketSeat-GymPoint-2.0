@@ -3,12 +3,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Header } from "../../components/Header";
 
-const plansOptions = [
-  { id: "1", option: "Start", duration: 1, price: 12000 },
-  { id: "2", option: "Gold", duration: 3, price: 10900 },
-  { id: "3", option: "Diamond", duration: 6, price: 8900 },
-];
-
 export default function ListPlansOptions() {
   const [options, setOptions] = useState<Options[]>([]);
   const [isSubscribed, setIsSubscribed] = useState(false);

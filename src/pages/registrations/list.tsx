@@ -30,7 +30,7 @@ export default function RegistrationsList() {
           <h4 className='font-bold text-xl'>Gerenciando matrículas</h4>
         </div>
         <div>
-          <Link href='/student/create'>
+          <Link href='/registrations/create'>
             <a className='font-bold bg-red-500 text-sm text-white px-4 py-3 mx-2 rounded-md '>
               CADASTRAR
             </a>
