@@ -9,6 +9,13 @@ export default function RegistrationCreate() {
   const [students, setStudents] = useState<Students[]>([]);
   const [options, setOptions] = useState<Options[]>([]);
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [stateOptionSelected, setStateOptionSelected] = useState<Options>(
+    {} as Options
+  );
+  const [stateFinishDate, setStateFinishDate] = useState("");
+
+  const { register, handleSubmit } = useForm();
+  const { push } = useRouter();
 
   function loadStudentsData() {
     setIsSubscribed(true);
@@ -24,8 +31,52 @@ export default function RegistrationCreate() {
     );
   }
 
-  const { register, handleSubmit } = useForm();
-  const { push } = useRouter();
+  function handleOptionChange(value: string) {
+    const option_id = value;
+    const optionSelected = options.find((option) => option.id === option_id);
+    setStateOptionSelected(optionSelected);
+  }
+
+  function convertFinishDateToMilliseconds(
+    monthOption: number,
+    date: string
+  ): Date {
+    const createdAtFormatted = new Date(`${date}T00:00:00`);
+
+    const monthToMilliseconds = 30 * 24 * 60 * 60 * 1000;
+
+    const optionMonthInMilliseconds = monthOption * monthToMilliseconds;
+
+    const createdAtInMilliseconds = createdAtFormatted.getTime();
+
+    const finishedAtFormatted = new Date(
+      createdAtInMilliseconds + optionMonthInMilliseconds
+    );
+
+    return finishedAtFormatted;
+  }
+
+  function handleCalculateFinishDateChange(initialDate: string) {
+    const optionSelectedMonths = stateOptionSelected.month;
+
+    const finishDateInMilliseconds = convertFinishDateToMilliseconds(
+      optionSelectedMonths,
+      initialDate
+    );
+
+    const finishDateDate = finishDateInMilliseconds.getDate();
+    const finishDateMonth = finishDateInMilliseconds.getMonth() + 1;
+    const finishDateYear = finishDateInMilliseconds.getFullYear();
+
+    const finishDateMonthConverted =
+      finishDateMonth < 10 ? `0${finishDateMonth}` : finishDateMonth;
+    const finishDateDateConverted =
+      finishDateDate < 10 ? `0${finishDateDate}` : finishDateDate;
+
+    setStateFinishDate(
+      `${finishDateYear}-${finishDateMonthConverted}-${finishDateDateConverted}`
+    );
+  }
 
   function handleCreateRegistrationSubmit({
     student_id,
@@ -34,22 +85,6 @@ export default function RegistrationCreate() {
     finished_at,
     price,
   }) {
-    const optionSelected = options.find((option) => option.id === option_id);
-
-    // TODO manipular datas...
-    const createdAtFormatted = new Date(`${created_at}T00:00:00`);
-
-    const optionMonthInMilliseconds =
-      optionSelected.month * 30 * 24 * 60 * 60 * 1000;
-
-    const createdAtInMilliseconds = createdAtFormatted.getTime();
-
-    const finishedAtFormatted = new Date(
-      createdAtInMilliseconds + optionMonthInMilliseconds
-    );
-
-    console.log(finishedAtFormatted);
-
     // console.log({
     //   student_id,
     //   option_id,
@@ -58,7 +93,6 @@ export default function RegistrationCreate() {
     //   price,
     // });
     // alert("Cadastro realizado!");
-
     // push("/registrations/list");
   }
 
@@ -109,8 +143,11 @@ export default function RegistrationCreate() {
             <div className='w-1/4'>
               <h4 className='font-bold my-2'>PLANO</h4>
               <select
+                {...register("option_id")}
                 className='w-11/12 border-gray-300 rounded-md'
-                {...register("option_id")}>
+                onChange={(event) => {
+                  handleOptionChange(event.target.value);
+                }}>
                 {options.map((option) => (
                   <option key={option.id} value={option.id}>
                     {option.title}
@@ -125,6 +162,9 @@ export default function RegistrationCreate() {
                 {...register("created_at")}
                 className='w-11/12 border-gray-300 rounded-md'
                 type='date'
+                onChange={(event) => {
+                  handleCalculateFinishDateChange(event.target.value);
+                }}
               />
             </div>
 
@@ -134,6 +174,7 @@ export default function RegistrationCreate() {
                 {...register("finished_at")}
                 className='w-11/12 border-gray-300 rounded-md'
                 type='date'
+                value={stateFinishDate}
               />
             </div>
 
