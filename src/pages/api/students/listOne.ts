@@ -6,7 +6,7 @@ export default async function StudentsListOne(
   response: NextApiResponse
 ) {
   const { id } = request.query as any;
-  const result = await prisma.student.findUnique({
+  const result = await prisma.students.findUnique({
     where: {
       id,
     },

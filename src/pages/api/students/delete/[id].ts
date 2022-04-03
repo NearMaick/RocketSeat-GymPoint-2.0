@@ -7,7 +7,7 @@ export default async function Update(
 ) {
   const { id } = request.query as any;
 
-  const result = await prisma.student.delete({
+  const result = await prisma.students.delete({
     where: {
       id: id,
     },

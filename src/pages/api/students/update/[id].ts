@@ -8,7 +8,7 @@ export default async function Update(
   const { id } = request.query as any;
   const { name, email, age, height, weight } = request.body;
 
-  const result = await prisma.student.update({
+  const result = await prisma.students.update({
     where: {
       id: id,
     },

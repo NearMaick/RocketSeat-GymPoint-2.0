@@ -7,7 +7,7 @@ export default async function CreateStudent(
 ) {
   const { name, email, height, weight, age } = request.body;
 
-  const result = await prisma.student.create({
+  const result = await prisma.students.create({
     data: {
       age: Number(age),
       height: Number(height),
