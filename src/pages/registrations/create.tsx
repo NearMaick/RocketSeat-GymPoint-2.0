@@ -1,9 +1,17 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Options, Students } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import * as Yup from "yup";
 import { Header } from "../../components/Header";
+
+const schema = Yup.object({
+  student_id: Yup.string().required("Selecione um estudante"),
+  option_id: Yup.string().required("Selecione uma opção"),
+  created_at: Yup.string().required("Selecione uma data"),
+});
 
 export default function RegistrationCreate() {
   const [students, setStudents] = useState<Students[]>([]);
@@ -13,8 +21,16 @@ export default function RegistrationCreate() {
     {} as Options
   );
   const [stateFinishDate, setStateFinishDate] = useState("");
+  const [totalPrice, setTotalPrice] = useState(0);
 
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
   const { push } = useRouter();
 
   function loadStudentsData() {
@@ -76,6 +92,8 @@ export default function RegistrationCreate() {
     setStateFinishDate(
       `${finishDateYear}-${finishDateMonthConverted}-${finishDateDateConverted}`
     );
+
+    setTotalPrice(stateOptionSelected.value);
   }
 
   function handleCreateRegistrationSubmit({
@@ -85,13 +103,13 @@ export default function RegistrationCreate() {
     finished_at,
     price,
   }) {
-    // console.log({
-    //   student_id,
-    //   option_id,
-    //   created_at: createdAtFormatted,
-    //   finished_at,
-    //   price,
-    // });
+    console.log({
+      student_id,
+      option_id,
+      created_at,
+      finished_at,
+      price,
+    });
     // alert("Cadastro realizado!");
     // push("/registrations/list");
   }
@@ -119,7 +137,11 @@ export default function RegistrationCreate() {
           <button
             className='font-bold bg-red-500 text-sm text-white px-4 py-3 mx-2 rounded-md '
             type='submit'
-            form='student-create-form'>
+            form='student-create-form'
+            onClick={() => {
+              setValue("finished_at", stateFinishDate);
+              setValue("price", totalPrice);
+            }}>
             SALVAR
           </button>
         </div>
@@ -138,6 +160,7 @@ export default function RegistrationCreate() {
               </option>
             ))}
           </select>
+          <p className='text-red-500'>{errors.student_id?.message}</p>
 
           <div className='flex'>
             <div className='w-1/4'>
@@ -148,12 +171,14 @@ export default function RegistrationCreate() {
                 onChange={(event) => {
                   handleOptionChange(event.target.value);
                 }}>
+                <option value=''>Selecione</option>
                 {options.map((option) => (
                   <option key={option.id} value={option.id}>
                     {option.title}
                   </option>
                 ))}
               </select>
+              <p className='text-red-500'>{errors.option_id?.message}</p>
             </div>
 
             <div className='w-1/4'>
@@ -166,6 +191,7 @@ export default function RegistrationCreate() {
                   handleCalculateFinishDateChange(event.target.value);
                 }}
               />
+              <p className='text-red-500'>{errors.created_at?.message}</p>
             </div>
 
             <div className='w-1/4'>
@@ -184,6 +210,7 @@ export default function RegistrationCreate() {
                 {...register("price")}
                 className='w-full border-gray-300 rounded-md'
                 type='number'
+                value={totalPrice}
               />
             </div>
           </div>
