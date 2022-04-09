@@ -53,7 +53,7 @@ export function Header() {
 
       <div className='p-2 w-56 flex flex-col items-end'>
         <h4>Maick Souza</h4>
-        <a href='' className='text-red-500'>
+        <a href='/' className='text-red-500'>
           Sair do sistema
         </a>
       </div>

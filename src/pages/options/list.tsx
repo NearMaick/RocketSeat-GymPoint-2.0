@@ -47,7 +47,7 @@ export default function ListPlansOptions() {
             <p className='py-4'>{planOption.month}</p>
             <p className='py-4 mx-28'>{planOption.value}</p>
             <div className='w-full py-4 flex justify-end'>
-              <Link href={`/planOption/update/${planOption.id}`}>
+              <Link href={`/options/update/${planOption.id}`}>
                 <a className='px-2 text-blue-500'>editar</a>
               </Link>
               <button type='button' onClick={() => {}} className='text-red-500'>

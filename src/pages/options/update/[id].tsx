@@ -10,7 +10,7 @@ export default function UpdatePlanOption() {
           <h4 className='font-bold text-xl'>Cadastro de plano</h4>
         </div>
         <div>
-          <Link href='/student/list'>
+          <Link href='/options/list'>
             <a className='font-bold bg-gray-500 text-sm text-white px-4 py-3 mx-2 rounded-md '>
               VOLTAR
             </a>
