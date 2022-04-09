@@ -73,6 +73,11 @@ export default function RegistrationCreate() {
   }
 
   function handleCalculateFinishDateChange(initialDate: string) {
+    if (stateOptionSelected.month === undefined) {
+      alert("Selecione o plano");
+      return;
+    }
+
     const optionSelectedMonths = stateOptionSelected.month;
 
     const finishDateInMilliseconds = convertFinishDateToMilliseconds(
