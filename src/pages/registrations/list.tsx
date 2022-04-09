@@ -1,12 +1,24 @@
-import { Registrations } from "@prisma/client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Header } from "../../components/Header";
 
+type RegistrationsProps = {
+  id: string;
+  student: {
+    name: string;
+  };
+  option: {
+    title: string;
+  };
+  created_at: string;
+  finished_at: string;
+  is_active: boolean;
+};
+
 let debounceTimer: NodeJS.Timeout;
 
 export default function RegistrationsList() {
-  const [registrations, setRegistrations] = useState<Registrations[]>([]);
+  const [registrations, setRegistrations] = useState<RegistrationsProps[]>([]);
   const [isSubscribed, setIsSubscribed] = useState(false);
 
   function loadRegistrationsData() {
@@ -53,7 +65,7 @@ export default function RegistrationsList() {
             <p className='py-4'>{registration.finished_at}</p>
             <p className='py-4 mx-28'>{registration.is_active && "SIM"}</p>
             <div className='w-full py-4 flex justify-end'>
-              <Link href={`/registration/update/${registration.id}`}>
+              <Link href={`/registrations/update/${registration.id}`}>
                 <a className='px-2 text-blue-500'>editar</a>
               </Link>
               <button type='button' onClick={() => {}} className='text-red-500'>
