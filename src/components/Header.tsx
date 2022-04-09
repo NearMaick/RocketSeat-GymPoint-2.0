@@ -13,7 +13,10 @@ export function Header() {
             <a
               className={`text-sm px-4 ${
                 pathname === "/student/list" && "font-semibold"
-              }`}>
+              }
+              ${pathname === "/student/create" && "font-semibold"}
+              ${pathname === "/student/update/[id]" && "font-semibold"}
+              `}>
               ALUNOS
             </a>
           </Link>
@@ -21,7 +24,9 @@ export function Header() {
             <a
               className={`text-sm px-4 ${
                 pathname === "/options/list" && "font-semibold"
-              }`}>
+              }
+              ${pathname === "/options/create" && "font-semibold"}
+              ${pathname === "/options/update/[id]" && "font-semibold"}`}>
               PLANOS
             </a>
           </Link>
@@ -29,7 +34,9 @@ export function Header() {
             <a
               className={`text-sm px-4 ${
                 pathname === "/registrations/list" && "font-semibold"
-              }`}>
+              }
+              ${pathname === "/registrations/create" && "font-semibold"}
+              ${pathname === "/registrations/update/[id]" && "font-semibold"}`}>
               MATRÍCULAS
             </a>
           </Link>
