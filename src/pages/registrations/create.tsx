@@ -106,17 +106,24 @@ export default function RegistrationCreate() {
     option_id,
     created_at,
     finished_at,
-    price,
   }) {
-    console.log({
-      student_id,
-      option_id,
-      created_at,
-      finished_at,
-      price,
+    fetch("http://localhost:3000/api/registrations/create", {
+      method: "post",
+      body: JSON.stringify({
+        student_id,
+        option_id,
+        created_at: new Date(created_at),
+        finished_at: new Date(finished_at),
+        is_active: true,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
-    // alert("Cadastro realizado!");
-    // push("/registrations/list");
+
+    alert("Cadastro realizado!");
+
+    push("/registrations/list");
   }
 
   useEffect(() => {
