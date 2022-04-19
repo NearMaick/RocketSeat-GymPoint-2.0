@@ -15,17 +15,36 @@ type RegistrationsProps = {
   is_active: boolean;
 };
 
-let debounceTimer: NodeJS.Timeout;
-
 export default function RegistrationsList() {
   const [registrations, setRegistrations] = useState<RegistrationsProps[]>([]);
   const [isSubscribed, setIsSubscribed] = useState(false);
 
-  function loadRegistrationsData() {
+  async function loadRegistrationsData() {
     setIsSubscribed(true);
-    fetch("http://localhost:3000/api/registrations/list").then((response) =>
-      response.json().then((data) => setRegistrations(data))
+    const response = await fetch(
+      "http://localhost:3000/api/registrations/list"
     );
+
+    const data = await response.json();
+    const dataFormatted = data.map((enroll: RegistrationsProps) => {
+      return {
+        id: enroll.id,
+        student: {
+          name: enroll.student.name,
+        },
+        option: {
+          title: enroll.option.title,
+        },
+        created_at: new Intl.DateTimeFormat("pt-BR").format(
+          new Date(enroll.created_at)
+        ),
+        finished_at: new Intl.DateTimeFormat("pt-BR").format(
+          new Date(enroll.finished_at)
+        ),
+        is_active: enroll.is_active,
+      } as RegistrationsProps;
+    });
+    setRegistrations(dataFormatted);
   }
 
   useEffect(() => {
@@ -69,7 +88,7 @@ export default function RegistrationsList() {
                 <a className='px-2 text-blue-500'>editar</a>
               </Link>
               <button type='button' onClick={() => {}} className='text-red-500'>
-                apagar
+                desativar
               </button>
             </div>
           </div>
