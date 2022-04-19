@@ -14,6 +14,21 @@ export default function ListPlansOptions() {
     );
   }
 
+  function handleDeleteOption(id: string) {
+    const isConfirm = confirm("Você tem certeza disso?");
+
+    if (isConfirm) {
+      fetch(`http://localhost:3000/api/options/delete/${id}`, {
+        method: "delete",
+      }).then(() => {
+        loadOptionsData();
+      });
+    } else {
+      return;
+    }
+    loadOptionsData();
+  }
+
   useEffect(() => {
     loadOptionsData();
 
@@ -50,7 +65,12 @@ export default function ListPlansOptions() {
               <Link href={`/options/update/${planOption.id}`}>
                 <a className='px-2 text-blue-500'>editar</a>
               </Link>
-              <button type='button' onClick={() => {}} className='text-red-500'>
+              <button
+                type='button'
+                onClick={() => {
+                  handleDeleteOption(planOption.id);
+                }}
+                className='text-red-500'>
                 apagar
               </button>
             </div>
