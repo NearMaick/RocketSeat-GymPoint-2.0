@@ -1,6 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { Header } from "../../../components/Header";
@@ -33,20 +34,14 @@ export default function RegistrationUpdate() {
   const { push, query } = useRouter();
   const { id } = query;
 
-  // useEffect(() => {
-  //   if (id) {
-  //     fetch(`http://localhost:3000/api/students/listOne?id=${id}`).then(
-  //       (response) =>
-  //         response.json().then((data) => {
-  //           setValue("name", data.name);
-  //           setValue("email", data.email);
-  //           setValue("age", data.age);
-  //           setValue("weight", data.weight);
-  //           setValue("height", data.height);
-  //         })
-  //     );
-  //   }
-  // }, [id, setValue]);
+  // TODO
+  useEffect(() => {
+    if (id) {
+      fetch(
+        `http://localhost:3000/api/registrations/listOne?id=96894bc4-daa1-455b-b8cb-714540cf9074`
+      ).then((response) => response.json().then((data) => console.log(data)));
+    }
+  }, [id, setValue]);
 
   function handleUpdateStudentSubmit({ name, email, height, weight, age }) {
     fetch(`http://localhost:3000/api/students/update/${id}`, {
