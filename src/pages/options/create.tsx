@@ -116,7 +116,6 @@ export default function CreatePlanOption() {
                 value={totalPrice}
                 disabled
               />
-              {/* <p className='text-red-500'>{errors.height?.message}</p> */}
             </div>
           </div>
         </form>

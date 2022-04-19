@@ -99,7 +99,6 @@ export default function StudentUpdate() {
             {...register("name")}
             className='w-full border-gray-300 rounded-md'
             type='text'
-            placeholder='John Doe'
           />
           <p className='text-red-500'>{errors.name?.message}</p>
 
@@ -108,7 +107,6 @@ export default function StudentUpdate() {
             {...register("email")}
             className='w-full border-gray-300 rounded-md'
             type='email'
-            placeholder='example@email.com'
           />
           <p className='text-red-500'>{errors.email?.message}</p>
 
