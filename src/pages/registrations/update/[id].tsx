@@ -8,22 +8,13 @@ import * as Yup from "yup";
 import { Header } from "../../../components/Header";
 
 const schema = Yup.object({
-  name: Yup.string().required("Nome é obrigatório"),
-  email: Yup.string()
-    .email("Deve ser um email válido")
-    .required("E-mail é obrigatório"),
-  height: Yup.number()
-    .positive("Não pode ser zero ou negativo")
-    .required("Altura é obrigatório"),
-  weight: Yup.number()
-    .positive("Não pode ser zero ou negativo")
-    .required("Peso é obrigatório"),
-  age: Yup.number()
-    .positive("Não pode ser zero ou negativo")
-    .required("Idade é obrigatório"),
+  name: Yup.string().required("É necessário preencher o nome de uma aluno"),
+  option_id: Yup.string().required("Selecione uma opção"),
+  created_at: Yup.string().required("Selecione uma data"),
 });
 
 export default function RegistrationUpdate() {
+  const [studentId, setStudentId] = useState("");
   const [options, setOptions] = useState<Options[]>([]);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [stateFinishDate, setStateFinishDate] = useState("");
@@ -104,22 +95,21 @@ export default function RegistrationUpdate() {
   const { push, query } = useRouter();
   const { id } = query;
 
-  // TODO
   useEffect(() => {
     if (id) {
-      fetch(
-        `http://localhost:3000/api/registrations/listOne?id=96894bc4-daa1-455b-b8cb-714540cf9074`
-      ).then((response) =>
-        response.json().then((data) => {
-          const [createdAt] = data.created_at.split("T");
-          const [finishedAt] = data.finished_at.split("T");
+      fetch(`http://localhost:3000/api/registrations/listOne?id=${id}`).then(
+        (response) =>
+          response.json().then((data) => {
+            const [createdAt] = data.created_at.split("T");
+            const [finishedAt] = data.finished_at.split("T");
 
-          setValue("name", data.student.name);
-          setValue("option", data.option.id);
-          setValue("created_at", createdAt);
-          setValue("finished_at", finishedAt);
-          setValue("price", data.option.value);
-        })
+            setStudentId(data.student.id);
+            setValue("name", data.student.name);
+            setValue("option", data.option.id);
+            setValue("created_at", createdAt);
+            setValue("finished_at", finishedAt);
+            setValue("price", data.option.value);
+          })
       );
     }
   }, [id, setValue]);
@@ -130,15 +120,18 @@ export default function RegistrationUpdate() {
     return () => setIsSubscribed(false);
   }, [isSubscribed]);
 
-  function handleUpdateStudentSubmit({ name, email, height, weight, age }) {
-    fetch(`http://localhost:3000/api/students/update/${id}`, {
+  function handleUpdateRegistrationSubmit({ option_id, created_at }) {
+    const createdAt = new Date(`${created_at}T03:00:00`);
+    const finishedAt = new Date(`${stateFinishDate}T03:00:00`);
+
+    fetch(`http://localhost:3000/api/registrations/updateRegistration/${id}`, {
       method: "put",
       body: JSON.stringify({
-        name,
-        email,
-        age,
-        height,
-        weight,
+        student_id: studentId,
+        option_id,
+        created_at: createdAt,
+        finished_at: finishedAt,
+        is_active: true,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -147,7 +140,7 @@ export default function RegistrationUpdate() {
 
     alert("Cadastro atualizado!");
 
-    push("/student/list");
+    push("/registrations/list");
   }
 
   return (
@@ -155,10 +148,10 @@ export default function RegistrationUpdate() {
       <Header />
       <section className='flex items-center justify-between p-8'>
         <div>
-          <h4 className='font-bold text-xl'>Cadastro de aluno</h4>
+          <h4 className='font-bold text-xl'>Atualização de matrícula</h4>
         </div>
         <div>
-          <Link href='/student/list'>
+          <Link href='/registrations/list'>
             <a className='font-bold bg-gray-500 text-sm text-white px-4 py-3 mx-2 rounded-md '>
               VOLTAR
             </a>
@@ -172,13 +165,14 @@ export default function RegistrationUpdate() {
         </div>
       </section>
       <section className='bg-white p-8'>
-        <form id='student-create-form' onSubmit={() => {}}>
+        <form
+          id='student-create-form'
+          onSubmit={handleSubmit(handleUpdateRegistrationSubmit)}>
           <h4 className='font-bold my-2'>ALUNO</h4>
           <input
             {...register("name")}
             className='w-full border-gray-300 rounded-md'
             type='text'
-            placeholder='John Doe'
           />
           <p className='text-red-500'>{errors.name?.message}</p>
 
@@ -186,7 +180,7 @@ export default function RegistrationUpdate() {
             <div className='w-1/4'>
               <h4 className='font-bold my-2'>PLANO</h4>
               <select
-                {...register("option")}
+                {...register("option_id")}
                 className='w-11/12 border-gray-300 rounded-md'
                 onChange={(event) => {
                   handleOptionChange(event.target.value);
@@ -198,7 +192,7 @@ export default function RegistrationUpdate() {
                   </option>
                 ))}
               </select>
-              <p className='text-red-500'>{errors.age?.message}</p>
+              <p className='text-red-500'>{errors.option_id?.message}</p>
             </div>
 
             <div className='w-1/4'>
@@ -211,7 +205,7 @@ export default function RegistrationUpdate() {
                   handleCalculateFinishDateChange(event.target.value);
                 }}
               />
-              <p className='text-red-500'>{errors.weight?.message}</p>
+              <p className='text-red-500'>{errors.created_at?.message}</p>
             </div>
 
             <div className='w-1/4'>
@@ -222,7 +216,6 @@ export default function RegistrationUpdate() {
                 type='date'
                 value={stateFinishDate}
               />
-              <p className='text-red-500'>{errors.height?.message}</p>
             </div>
 
             <div className='w-1/4 ml-5'>
@@ -233,7 +226,6 @@ export default function RegistrationUpdate() {
                 type='number'
                 value={totalPrice}
               />
-              <p className='text-red-500'>{errors.height?.message}</p>
             </div>
           </div>
         </form>
