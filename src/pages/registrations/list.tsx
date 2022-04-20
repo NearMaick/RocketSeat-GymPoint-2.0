@@ -47,11 +47,26 @@ export default function RegistrationsList() {
     setRegistrations(dataFormatted);
   }
 
+  function handleDeactivateRegistration(id: string) {
+    fetch(
+      `http://localhost:3000/api/registrations/deactivateRegistration/${id}`,
+      {
+        method: "put",
+        body: JSON.stringify({
+          is_active: false,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
+
   useEffect(() => {
     loadRegistrationsData();
 
     return () => setIsSubscribed(false);
-  }, [isSubscribed]);
+  }, [isSubscribed, registrations]);
 
   return (
     <div className='h-screen w-screen bg-gray-100'>
@@ -87,8 +102,16 @@ export default function RegistrationsList() {
               <Link href={`/registrations/update/${registration.id}`}>
                 <a className='px-2 text-blue-500'>editar</a>
               </Link>
-              <button type='button' onClick={() => {}} className='text-red-500'>
-                desativar
+              <button
+                disabled={!registration.is_active}
+                type='button'
+                onClick={() => {
+                  handleDeactivateRegistration(registration.id);
+                }}
+                className={`text-red-500 ${
+                  registration.is_active ? "opacity-100" : "opacity-25"
+                }`}>
+                {registration.is_active ? "desativar" : "desativado"}
               </button>
             </div>
           </div>
