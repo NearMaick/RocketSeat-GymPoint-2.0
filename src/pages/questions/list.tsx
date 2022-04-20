@@ -5,10 +5,24 @@ import { Header } from "../../components/Header";
 
 Modal.setAppElement("#__next");
 
+type QuestionProps = {
+  id: string;
+  question: string;
+};
+
+interface QuestionsRegistrationsProps extends QuestionsRegistrations {
+  registration: {
+    student: {
+      name: string;
+    };
+  };
+}
+
 export default function QuestionsList() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [answer, setAnswer] = useState("");
-  const [questions, setQuestions] = useState<QuestionsRegistrations[]>([]);
+  const [questions, setQuestions] = useState<QuestionsRegistrationsProps[]>([]);
+  const [question, setQuestion] = useState<QuestionProps>({} as QuestionProps);
   const [isSubscribed, setIsSubscribed] = useState(false);
 
   function loadQuestionsData() {
@@ -18,19 +32,25 @@ export default function QuestionsList() {
     );
   }
 
-  function openModal(id: string) {
-    setModalIsOpen(true);
-    console.log(id);
+  async function handleFindQuestion(id: string): Promise<any> {
+    return fetch(`http://localhost:3000/api/questions/listOne?id=${id}`);
   }
 
-  function afterOpenModal() {
-    console.log("modal aberto");
+  async function openModal(id: string) {
+    setModalIsOpen(true);
+    const response = await handleFindQuestion(id);
+    const data = await response.json();
+    console.log(data);
+    setQuestion(data);
   }
 
   function closeModal() {
-    console.log("modal fechado");
     setModalIsOpen(false);
-    console.log(answer);
+  }
+
+  function handleSubmitAnswer() {
+    console.log(answer, question.id);
+    setModalIsOpen(false);
   }
 
   useEffect(() => {
@@ -68,7 +88,6 @@ export default function QuestionsList() {
       </section>
       <Modal
         isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
         style={{
           overlay: {
@@ -79,11 +98,7 @@ export default function QuestionsList() {
         className='bg-white h-1/2 w-1/2 rounded-md mx-auto my-56 flex flex-col justify-between'
         contentLabel='Example Modal'>
         <h2 className='font-bold text-xl p-6'>Pergunta do aluno</h2>
-        <p className='px-6'>
-          Olá pessoal da academia, gostaria de saber se quando acordar devo
-          ingerir batata doce e frango logo de primeira, preparar as marmitas e
-          lotar a geladeira? Dou um pico de insulina e jogo o hipercalórico?
-        </p>
+        <p className='px-6'>{question.question}</p>
         <h2 className='font-bold text-xl px-6 py-2'>Sua resposta</h2>
         <textarea
           className='w-11/12 h-64 mx-auto rounded-md'
@@ -91,7 +106,7 @@ export default function QuestionsList() {
           placeholder='Digite sua resposta aqui'
         />
         <button
-          onClick={closeModal}
+          onClick={handleSubmitAnswer}
           type='button'
           className='bg-red-500 text-sm text-white  m-6 p-2 rounded-md'>
           Responder Aluno
