@@ -1,17 +1,12 @@
-import { StudentsRepository } from "../_repositories/StudentsRepository";
-
-interface ICreateStudentRequest {
-  name: string;
-  email: string;
-  height: number;
-  weight: number;
-  age: number;
-}
+import {
+  ICreateStudentData,
+  StudentsRepository,
+} from "../_repositories/StudentsRepository";
 
 export class CreateStudent {
   constructor(private studentsRepository: StudentsRepository) {}
 
-  async execute({ name, email, height, weight, age }: ICreateStudentRequest) {
+  async execute({ name, email, height, weight, age }: ICreateStudentData) {
     const student = await this.studentsRepository.findByEmail(email);
 
     if (student) {
