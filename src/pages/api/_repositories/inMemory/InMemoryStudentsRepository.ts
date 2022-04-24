@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import {
-  ICreateStudentData,
   IListStudentData,
+  IStudentData,
   StudentsRepository,
 } from "../StudentsRepository";
 
@@ -22,7 +22,7 @@ export class InMemoryStudentsRepository implements StudentsRepository {
     height,
     weight,
     age,
-  }: ICreateStudentData): Promise<void> {
+  }: IStudentData): Promise<void> {
     this.students.push({
       data: {
         id: randomUUID(),
@@ -45,7 +45,7 @@ export class InMemoryStudentsRepository implements StudentsRepository {
 
   async update(
     id: string,
-    { age, name, height, weight }: ICreateStudentData
+    { age, name, height, weight }: IStudentData
   ): Promise<void> {
     const index = this.students.findIndex((student) => student.data.id === id);
 

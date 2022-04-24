@@ -1,4 +1,4 @@
-export interface ICreateStudentData {
+export interface IStudentData {
   id?: string;
   name: string;
   email: string;
@@ -19,9 +19,9 @@ export interface IListStudentData {
 }
 
 export interface StudentsRepository {
-  create(data: ICreateStudentData): Promise<void>;
-  findByEmail(email: string): Promise<ICreateStudentData>;
+  create(data: IStudentData): Promise<void>;
+  findByEmail(email: string): Promise<IStudentData>;
   listAll(): Promise<IListStudentData[]>;
-  update(id: string, data: ICreateStudentData): Promise<void>;
+  update(id: string, data: IStudentData): Promise<void>;
   delete(id: string): Promise<void>;
 }

@@ -1,12 +1,12 @@
 import {
-  ICreateStudentData,
+  IStudentData,
   StudentsRepository,
 } from "../_repositories/StudentsRepository";
 
 export class CreateStudent {
   constructor(private studentsRepository: StudentsRepository) {}
 
-  async execute({ name, email, height, weight, age }: ICreateStudentData) {
+  async execute({ name, email, height, weight, age }: IStudentData) {
     const student = await this.studentsRepository.findByEmail(email);
 
     if (student) {
