@@ -2,6 +2,7 @@ import { randomUUID } from "crypto";
 import { ICreateStudentData, StudentsRepository } from "../StudentsRepository";
 
 interface IStudentProps {
+  id?: string;
   name: string;
   email: string;
   height: number;
@@ -36,5 +37,21 @@ export class InMemoryStudentsRepository implements StudentsRepository {
 
   async listAll(): Promise<IStudentProps[]> {
     return this.students;
+  }
+
+  async update(
+    id: string,
+    { age, name, height, weight }: ICreateStudentData
+  ): Promise<void> {
+    const index = this.students.findIndex((student) => student.data.id === id);
+
+    this.students.splice(index, 0, {
+      data: {
+        age: Number(age),
+        height: Number(height),
+        weight: Number(weight),
+        name,
+      },
+    });
   }
 }

@@ -10,7 +10,7 @@ export class CreateStudent {
     const student = await this.studentsRepository.findByEmail(email);
 
     if (student) {
-      throw new Error("This email is already use");
+      throw new Error("This email is already in use");
     }
 
     await this.studentsRepository.create({

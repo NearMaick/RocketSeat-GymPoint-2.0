@@ -46,6 +46,6 @@ describe("CreateStudent service", () => {
         name: "John Doe",
         weight: 50,
       })
-    ).rejects.toEqual(new Error("This email is already use"));
+    ).rejects.toEqual(new Error("This email is already in use"));
   });
 });
