@@ -1,10 +1,13 @@
 import { InMemoryStudentsRepository } from "../_repositories/inMemory/InMemoryStudentsRepository";
+import { ListStudents } from "./ListStudents";
 
 let inMemoryStudentsRepository: InMemoryStudentsRepository;
+let listStudents: ListStudents;
 
 describe("ListStudents Service", () => {
   beforeEach(() => {
     inMemoryStudentsRepository = new InMemoryStudentsRepository();
+    listStudents = new ListStudents(inMemoryStudentsRepository);
   });
 
   it("should be able to list all students", async () => {
@@ -23,11 +26,9 @@ describe("ListStudents Service", () => {
       weight: 50,
     });
 
-    expect(inMemoryStudentsRepository.students[0].data.email).toEqual(
-      "email@test.com"
-    );
-    expect(inMemoryStudentsRepository.students[1].data.email).toEqual(
-      "email-two@test.com"
-    );
+    const students = await listStudents.execute();
+
+    expect(students[0].data.email).toEqual("email@test.com");
+    expect(students[1].data.email).toEqual("email-two@test.com");
   });
 });
