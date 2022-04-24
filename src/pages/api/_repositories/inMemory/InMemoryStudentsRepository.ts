@@ -45,7 +45,7 @@ export class InMemoryStudentsRepository implements StudentsRepository {
   ): Promise<void> {
     const index = this.students.findIndex((student) => student.data.id === id);
 
-    this.students.splice(index, 0, {
+    this.students.splice(index, 1, {
       data: {
         age: Number(age),
         height: Number(height),
@@ -53,5 +53,11 @@ export class InMemoryStudentsRepository implements StudentsRepository {
         name,
       },
     });
+  }
+
+  async delete(id: string): Promise<void> {
+    const index = this.students.findIndex((student) => student.data.id === id);
+
+    this.students.splice(index, 1);
   }
 }

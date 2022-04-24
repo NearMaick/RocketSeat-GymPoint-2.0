@@ -12,4 +12,5 @@ export interface StudentsRepository {
   findByEmail(email: string): Promise<ICreateStudentData>;
   listAll(): Promise<ICreateStudentData[]>;
   update(id: string, data: ICreateStudentData): Promise<void>;
+  delete(id: string): Promise<void>;
 }
