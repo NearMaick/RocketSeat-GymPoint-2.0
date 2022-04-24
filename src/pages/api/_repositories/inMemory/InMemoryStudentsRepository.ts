@@ -1,5 +1,9 @@
 import { randomUUID } from "crypto";
-import { ICreateStudentData, StudentsRepository } from "../StudentsRepository";
+import {
+  ICreateStudentData,
+  IListStudentData,
+  StudentsRepository,
+} from "../StudentsRepository";
 
 interface IStudentProps {
   id?: string;
@@ -35,7 +39,7 @@ export class InMemoryStudentsRepository implements StudentsRepository {
     return this.students.find((student) => student.data.email === email);
   }
 
-  async listAll(): Promise<IStudentProps[]> {
+  async listAll(): Promise<IListStudentData[]> {
     return this.students;
   }
 
