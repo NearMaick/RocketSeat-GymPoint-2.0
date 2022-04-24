@@ -1,8 +1,15 @@
 import { randomUUID } from "crypto";
 import { ICreateStudentData, StudentsRepository } from "../StudentsRepository";
 
+interface IStudentProps {
+  name: string;
+  email: string;
+  height: number;
+  weight: number;
+  age: number;
+}
 export class InMemoryStudentsRepository implements StudentsRepository {
-  public items = [];
+  public students = [];
 
   async create({
     name,
@@ -11,7 +18,7 @@ export class InMemoryStudentsRepository implements StudentsRepository {
     weight,
     age,
   }: ICreateStudentData): Promise<void> {
-    this.items.push({
+    this.students.push({
       data: {
         id: randomUUID(),
         age: Number(age),
@@ -21,5 +28,13 @@ export class InMemoryStudentsRepository implements StudentsRepository {
         name,
       },
     });
+  }
+
+  async findByEmail(email: string): Promise<IStudentProps> {
+    return this.students.find((student) => student.data.email === email);
+  }
+
+  async listAll(): Promise<IStudentProps[]> {
+    return this.students;
   }
 }

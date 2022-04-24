@@ -8,4 +8,6 @@ export interface ICreateStudentData {
 
 export interface StudentsRepository {
   create(data: ICreateStudentData): Promise<void>;
+  findByEmail(email: string): Promise<ICreateStudentData>;
+  listAll(): Promise<ICreateStudentData[]>;
 }

@@ -32,7 +32,7 @@ export default function StudentCreate() {
   const { push } = useRouter();
 
   function handleCreateStudentSubmit({ name, email, height, weight, age }) {
-    fetch("http://localhost:3000/api/students/create", {
+    fetch("http://localhost:3000/api/students/create-student", {
       method: "post",
       body: JSON.stringify({
         name,
