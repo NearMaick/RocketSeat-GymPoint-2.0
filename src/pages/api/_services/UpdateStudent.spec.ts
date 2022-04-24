@@ -18,11 +18,11 @@ describe("UpdateStudent Service", () => {
       name: "John Doe",
       weight: 50,
     });
-
     const { id } = await inMemoryStudentsRepository.findByEmail(
       "email@test.com"
     );
-    await inMemoryStudentsRepository.update(id, {
+
+    await updateStudent.execute(id, {
       id,
       age: 20,
       email: "email@test.com",
@@ -30,6 +30,7 @@ describe("UpdateStudent Service", () => {
       name: "Joe Doe",
       weight: 55,
     });
+
     expect(inMemoryStudentsRepository.students[0].data.name).toEqual("Joe Doe");
   });
 });

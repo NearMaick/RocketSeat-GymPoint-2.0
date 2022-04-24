@@ -5,7 +5,7 @@ import {
 
 export class UpdateStudent {
   constructor(private studentsRepository: StudentsRepository) {}
-  execute(
+  async execute(
     id: string,
     { age, height, email, name, weight }: ICreateStudentData
   ) {
