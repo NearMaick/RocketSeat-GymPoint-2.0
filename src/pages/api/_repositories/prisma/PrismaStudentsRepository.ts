@@ -24,19 +24,43 @@ export class PrismaStudentsRepository implements StudentsRepository {
     });
   }
 
-  findByEmail(email: string): Promise<IStudentData> {
-    throw new Error("Method not implemented.");
+  async findByEmail(email: string): Promise<IStudentData> {
+    const student = await prisma.students.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    return student;
   }
 
-  listAll(): Promise<IListStudentData[]> {
-    throw new Error("Method not implemented.");
+  async listAll(): Promise<IListStudentData[]> {
+    const students = await prisma.students.findMany();
+
+    return students;
   }
 
-  update(id: string, data: IStudentData): Promise<void> {
-    throw new Error("Method not implemented.");
+  async update(id: string, data: IStudentData): Promise<void> {
+    await prisma.students.update({
+      data: {
+        id: data.id,
+        name: data.name,
+        email: data.email,
+        height: data.age,
+        weight: data.age,
+        age: data.age,
+      },
+      where: {
+        id,
+      },
+    });
   }
 
-  delete(id: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async delete(id: string): Promise<void> {
+    await prisma.students.delete({
+      where: {
+        id,
+      },
+    });
   }
 }

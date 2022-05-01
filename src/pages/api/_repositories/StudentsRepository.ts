@@ -8,14 +8,12 @@ export interface IStudentData {
 }
 
 export interface IListStudentData {
-  data: {
-    id?: string;
-    name: string;
-    email: string;
-    height: number;
-    weight: number;
-    age: number;
-  };
+  id?: string;
+  name: string;
+  email: string;
+  height: number;
+  weight: number;
+  age: number;
 }
 
 export interface StudentsRepository {
